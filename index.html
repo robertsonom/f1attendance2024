@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>F1 Attendance 2024</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+<style>
+    body {
+      margin:0;
+      padding:0;
+      font-family:
+      sans-serif;
+      }
+  
+    h1 {
+      position: absolute;
+      left: 50px;
+      top: 10px;
+      padding: 8px 2%;
+      margin: 0;
+      background: rgba(255, 30, 0, 0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 3px;
+      color: whitesmoke;
+      font-size: 1.5em;
+      z-index: 800;
+      }
+  
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .legend {
+      padding: 10px;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 14px;
+    }
+
+    /* legend i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.7;
+      border-radius: 50%;
+    } */
+  
+  </style>
+
+</head>
+<body>
+    <div id='map'></div>
+    <h1>F1 Track Attendance and Winners, 2024</h1>
+
+</style>
+<link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+<script src="https://unpkg.com/leaflet@1.7.0/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma.min.js"></script>
+
+<script>
+
+var mymap = L.map('map', {
+    center: [52.071,-1.016], 
+    zoom: 5, 
+    maxZoom: 13,
+    minZoom: 3,
+    detectRetina: true 
+});
+
+L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png').addTo(mymap);
+
+tracks = L.geoJson.ajax("assets/f1data2.geojson", {
+    attribution: 'Data: <a href="https://www.blackbookmotorsport.com/features/f1-2024-numbers-season-review-viewership-attendance-commercial/" target="_blank">Blackbook Motorsport</a> | (Missing data due to attendence information being unpublished) | Map: Owen Robertson',
+    pointToLayer: function (feature, x) {
+        const circleMarker = L.circleMarker(x, {
+            color: '#FF1E00',
+            opacity: 1,
+            weight: 2,
+            fillColor: '#FF1E00',
+            fillOpacity: .35,
+            radius: calcRadius(feature.properties.Attendance)
+        });
+
+        circleMarker.on({
+            mouseover: function(e) {
+                this.setStyle({ color: (feature.properties.ConstColor), fillColor: (feature.properties.ConstColor) });
+            },
+            mouseout: function(e) {
+                this.setStyle({ color: '#FF1E00', fillColor: '#FF1E00' });
+            }
+        });
+
+        return circleMarker;
+    },
+    onEachFeature: function (feature, layer) {
+        const popupContent = `
+            <b>Race:</b> ${feature.properties.Track}<br>
+            <b>Attendance Count:</b> ${feature.properties.Attendance}<br>
+            <b>Constructor Winner:</b> ${feature.properties.Constructor}<br>
+            <b>Driver Winner:</b> ${feature.properties.Driver}`;
+        layer.bindPopup(popupContent);
+    }
+});
+
+var minValue = 30000;
+var minRadius = 5;
+
+function calcRadius(val) {
+    return 1 * Math.pow(val/minValue,.95) * minRadius;
+}
+
+L.control.scale({position: 'bottomleft'}).addTo(mymap);
+
+tracks.addTo(mymap);
+
+  $.getJSON("data/f1data2.geojson")  
+    .done(function(data) {
+      var info = processData(data);
+      createPropSymbols(features.properties.Attendance, data);
+      createLegend(info.minRadius, info.maxRadius);
+    })
+
+function createLegend(min, max) {
+		 
+     if (min < 10) {	
+       min = 10; 
+     }
+ 
+     function roundNumber(inNumber) {
+ 
+         return (Math.round(inNumber/10) * 10);  
+     }
+ 
+     var legend = L.control( { position: 'bottomright' } );
+ 
+     legend.onAdd = function(map) {
+ 
+     var legendContainer = L.DomUtil.create("div", "legend");  
+     var symbolsContainer = L.DomUtil.create("div", "symbolsContainer");
+     var classes = [roundNumber(min), roundNumber((max-min)/2), roundNumber(max)]; 
+     var legendCircle;  
+     var lastRadius = 0;
+     var currentRadius;
+     var margin;
+ 
+     L.DomEvent.addListener(legendContainer, 'mousedown', function(e) { 
+       L.DomEvent.stopPropagation(e); 
+     });  
+ 
+     $(legendContainer).append("<h2 id='legendTitle'># of somethings</h2>");
+     
+     for (var i = 0; i <= classes.length-1; i++) {  
+ 
+       legendCircle = L.DomUtil.create("div", "legendCircle");  
+       
+       currentRadius = calcPropRadius(classes[i]);
+       
+       margin = -currentRadius - lastRadius - 2;
+ 
+       $(legendCircle).attr("style", "width: " + currentRadius*2 + 
+         "px; height: " + currentRadius*2 + 
+         "px; margin-left: " + margin + "px" );				
+       $(legendCircle).append("<span class='legendValue'>"+classes[i]+"</span>");
+ 
+       $(symbolsContainer).append(legendCircle);
+ 
+       lastRadius = currentRadius;
+ 
+     }
+ 
+     $(legendContainer).append(symbolsContainer); 
+ 
+     return legendContainer; 
+ 
+     };
+ 
+     legend.addTo(map);  
+ 
+   }
+
+</script>
+</body>
+</html>

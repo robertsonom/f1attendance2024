@@ -1,0 +1,24 @@
+﻿id,Year,Track,Driver,Constructor,ConstColor,Attendance(abv),Attendance,lon,lat
+1,2024,Great Britain,Lewis Hamilton,Mercedes,#27F4D2,480,480000,-1.016,52.071
+2,2024,Australia,Carlos Sainz,Ferrari,#E80020,452.1,452100,144.968333,-37.849722
+3,2024,Austin,Charles Leclerc,Ferrari,#E80020,430,430000,-97.641111,30.132778
+4,2024,Mexico,Carlos Sainz,Ferrari,#E80020,405,405000,-99.0925,19.406111
+5,2024,Belgium,Lewis Hamilton,Mercedes,#27F4D2,380,380000,5.971389,50.437222
+6,2024,Canada,Max Verstappen,Red Bull,#3671C6,350,350000,-73.5225,45.500556
+7,2024,Monza,Charles Leclerc,Ferrari,#E80020,335,335000,9.289444,45.620556
+8,2024,Hungary,Oscar Piastri,McLaren,#FF8000,310,310000,19.251111,47.582222
+9,2024,Las Vegas,George Russel,Mercedes,#27F4D2,306,306000,-115.16217,36.10995
+10,2024,Netherlands,Lando Norris,McLaren,#FF8000,305,305000,4.540833,52.388889
+11,2024,Austria,George Russel,Mercedes,#27F4D2,302,302000,14.764722,47.219722
+12,2024,Brazil,Max Verstappen,Red Bull,#3671C6,291.7,291700,-46.697222,-23.701111
+13,2024,Spain,Max Verstappen,Red Bull,#3671C6,288.2,288200,2.261111,41.57
+14,2024,Miami,Lando Norris,McLaren,#FF8000,275,275000,-80.238889,25.958056
+15,2024,Singapore,Lando Norris,McLaren,#FF8000,269.1,269100,103.86385,1.291531
+16,2024,Japan,Max Verstappen,Red Bull,#3671C6,229,229000,136.5389,34.8417
+17,2024,Imola,Max Verstappen,Red Bull,#3671C6,200,200000,11.713333,44.341111
+18,2024,Abu Dhabi,Lando Norris,McLaren,#FF8000,190,190000,54.603056,24.467222
+19,2024,China,Max Verstappen,Red Bull,#3671C6,180,180000,121.219722,31.338889
+20,2024,Qatar,Max Verstappen,Red Bull,#3671C6,155,155000,51.454167,25.49
+21,2024,Saudi Arabia,Max Verstappen,Red Bull,#3671C6,150,150000,39.104444,21.631944
+22,2024,Bahrain,Max Verstappen,Red Bull,#3671C6,100,100000,50.510556,26.0325
+23,2024,Azerbaijan,Oscar Piastri,McLaren,#FF8000,75,75000,49.853333,40.3725
